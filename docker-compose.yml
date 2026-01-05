@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    image: osen_shop
+    build: .
+    container_name: osen_shop
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/ecommerce
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: 9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t
+      JWT_EXPIRATION: 86400000
+    restart: unless-stopped
+
+volumes:
+  pgdata:

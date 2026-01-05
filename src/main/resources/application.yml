@@ -3,10 +3,10 @@ spring:
       name: "ecommerce"
 
     datasource:
-      url: jdbc:mysql://localhost:3306/ecommerce?useSSL=false&serverTimezone=UTC
-      username: ${DB_USER}
+      url: ${DB_URL}
+      username: ${DB_USERNAME}
       password: ${DB_PASSWORD}
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.postgresql.Driver
 
     output:
       ansi:
@@ -14,7 +14,7 @@ spring:
 
     jpa:
       hibernate:
-        ddl-auto: create
+        ddl-auto: update
       show-sql: true
       defer-datasource-initialization: true
 
@@ -26,7 +26,7 @@ spring:
 application:
   security:
     jwt:
-      secret-key: ${SECRET_KEY}
+      secret-key: ${JWT_SECRET}
       expiration: 30 # minutes
       refresh-expiration: 300
 
@@ -44,3 +44,6 @@ logging:
     com:
       zaxxer:
         hikari=DEBUG:
+
+server:
+  port: ${PORT:8080}
