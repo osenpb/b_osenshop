@@ -12,7 +12,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "products")
+@Table(
+        name = "products",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_products_name",
+                        columnNames = "name"
+                )
+        }
+)
 public class Product {
 
     @Id

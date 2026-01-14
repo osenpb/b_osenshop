@@ -30,7 +30,6 @@ application:
       expiration: 30 # minutes
       refresh-expiration: 300
 
-
 #    oauth2:
 #      client:
 #        registration:

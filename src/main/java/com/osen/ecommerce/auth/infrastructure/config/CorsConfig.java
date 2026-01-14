@@ -16,13 +16,12 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(Arrays.asList(
-           "http://localhost:4200"
-                // aqui puedes agregar otro puerto en caso este ocupado,
-                // la idea es que sea donde corre el front
-                // en produccion seria tu dominio
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        //Arrays.asList("http://localhost:4200"
+        // aqui puedes agregar otro puerto en caso este ocupado,
+        // la idea es que sea donde corre el front
+        // en produccion seria tu dominio
 
-        ));
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
         ));

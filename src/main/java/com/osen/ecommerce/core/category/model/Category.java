@@ -12,7 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
-@Table
+@Table(
+        name = "category",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_category_name",
+                        columnNames = "name"
+                )
+        }
+)
 public class Category {
 
     @Id

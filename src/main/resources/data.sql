@@ -1,6 +1,3 @@
--- =========================
--- USERS
--- =========================
 INSERT INTO users (first_name, last_name, email, password, role)
 VALUES
 (
@@ -20,9 +17,6 @@ VALUES
 ON CONFLICT (email) DO NOTHING;
 
 
--- =========================
--- CATEGORIES
--- =========================
 INSERT INTO category (name)
 VALUES
   ('Audífonos'),
@@ -31,21 +25,44 @@ VALUES
 ON CONFLICT (name) DO NOTHING;
 
 
--- =========================
--- PRODUCTS - AUDÍFONOS
--- =========================
-INSERT INTO products (
-  name,
-  description,
-  price,
-  stock,
-  image_url,
-  created_at,
-  is_active,
-  category_id
-)
+INSERT INTO users (first_name, last_name, email, password, role)
 VALUES
 (
+  'osen',
+  'osen',
+  'osen@osen.com',
+  '$2a$12$GpKmjCGpWEm8TrOuUFvrDOEXWVyYLvHBJbCYu6k7xzOeOZxyNeL56',
+  'ROLE_USER'
+),
+(
+  'admin',
+  'admin',
+  'admin@admin.com',
+  '$2a$12$ZtiZcpx.HubSRA7UCNSIzeLOmD.jJBGjxrVW2SOjKErdkDicyoRz6',
+  'ROLE_ADMIN'
+),
+(
+  'usuario',
+  'usuario',
+  'usuario@usuario.com',
+  '$2a$12$eQS9EzSAAdExh9MKdVQudOqqxpyVV3FseFDiNYriXsTa32SXjmdUO',
+  'ROLE_USER'
+)
+ON CONFLICT (email) DO NOTHING;
+
+
+INSERT INTO category (name)
+VALUES
+  ('Audífonos'),
+  ('Celulares'),
+  ('Teclados')
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO products (
+  name, description, price, stock, image_url, created_at, is_active, category_id
+)
+SELECT
   'Audífonos Sony WH-1000XM5',
   'Audífonos inalámbricos con cancelación de ruido de Sony',
   1499.00,
@@ -53,9 +70,16 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Audífonos')
-),
-(
+  c.id
+FROM category c
+WHERE c.name = 'Audífonos'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO products (
+  name, description, price, stock, image_url, created_at, is_active, category_id
+)
+SELECT
   'Audífonos Bose QuietComfort 45',
   'Audífonos Bose con excelente cancelación de ruido y comodidad',
   1399.00,
@@ -63,9 +87,15 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Audífonos')
-),
-(
+  c.id
+FROM category c
+WHERE c.name = 'Audífonos'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO products (
+  name, description, price, stock, image_url, created_at, is_active, category_id
+)
+SELECT
   'Audífonos Inalámbricos JBL Tune 230NC',
   'Audífonos JBL inalámbricos con sonido potente y ligero',
   399.00,
@@ -73,25 +103,16 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Audífonos')
-);
+  c.id
+FROM category c
+WHERE c.name = 'Audífonos'
+ON CONFLICT (name) DO NOTHING;
 
 
--- =========================
--- PRODUCTS - CELULARES
--- =========================
 INSERT INTO products (
-  name,
-  description,
-  price,
-  stock,
-  image_url,
-  created_at,
-  is_active,
-  category_id
+  name, description, price, stock, image_url, created_at, is_active, category_id
 )
-VALUES
-(
+SELECT
   'Samsung Galaxy S23',
   'Smartphone Samsung con cámara avanzada y pantalla AMOLED',
   3299.00,
@@ -99,9 +120,15 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Celulares')
-),
-(
+  c.id
+FROM category c
+WHERE c.name = 'Celulares'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO products (
+  name, description, price, stock, image_url, created_at, is_active, category_id
+)
+SELECT
   'iPhone 14',
   'iPhone 14 con chip A15 y cámara dual avanzada',
   3899.00,
@@ -109,9 +136,15 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Celulares')
-),
-(
+  c.id
+FROM category c
+WHERE c.name = 'Celulares'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO products (
+  name, description, price, stock, image_url, created_at, is_active, category_id
+)
+SELECT
   'Xiaomi Redmi Note 12',
   'Smartphone Xiaomi económico con buena batería y pantalla AMOLED',
   1099.00,
@@ -119,25 +152,15 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Celulares')
-);
+  c.id
+FROM category c
+WHERE c.name = 'Celulares'
+ON CONFLICT (name) DO NOTHING;
 
-
--- =========================
--- PRODUCTS - TECLADOS
--- =========================
 INSERT INTO products (
-  name,
-  description,
-  price,
-  stock,
-  image_url,
-  created_at,
-  is_active,
-  category_id
+  name, description, price, stock, image_url, created_at, is_active, category_id
 )
-VALUES
-(
+SELECT
   'Teclado Mecánico Logitech G Pro X',
   'Teclado mecánico para gamers con switches personalizables',
   699.00,
@@ -145,9 +168,15 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Teclados')
-),
-(
+  c.id
+FROM category c
+WHERE c.name = 'Teclados'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO products (
+  name, description, price, stock, image_url, created_at, is_active, category_id
+)
+SELECT
   'Teclado Mecánico Redragon Kumara K552',
   'Teclado mecánico económico con retroiluminación LED',
   249.00,
@@ -155,9 +184,15 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Teclados')
-),
-(
+  c.id
+FROM category c
+WHERE c.name = 'Teclados'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO products (
+  name, description, price, stock, image_url, created_at, is_active, category_id
+)
+SELECT
   'Teclado Inalámbrico Keychron K6',
   'Teclado compacto e inalámbrico con compatibilidad Mac/Windows',
   459.00,
@@ -165,5 +200,7 @@ VALUES
   'https://eatkxdfnzqpqmtljjxye.supabase.co/storage/v1/object/public/previews/ia_image_cellphone.png',
   NOW(),
   TRUE,
-  (SELECT id FROM category WHERE name = 'Teclados')
-);
+  c.id
+FROM category c
+WHERE c.name = 'Teclados'
+ON CONFLICT (name) DO NOTHING;
