@@ -5,11 +5,10 @@ import com.osen.ecommerce.auth.domain.models.User;
 import com.osen.ecommerce.common.exceptions.InsufficientStockException;
 import com.osen.ecommerce.core.cart.models.Cart;
 import com.osen.ecommerce.core.cart.models.CartItem;
-import com.osen.ecommerce.core.cart.repositories.CartItemRepository;
 import com.osen.ecommerce.core.cart.repositories.CartRepository;
 import com.osen.ecommerce.core.cart.service.CartItemService;
 import com.osen.ecommerce.core.cart.service.CartService;
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
+import com.osen.ecommerce.common.exceptions.EntityNotFoundException;
 import com.osen.ecommerce.core.product.model.Product;
 import com.osen.ecommerce.core.product.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -33,7 +32,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart findById(Long id) {
         return cartRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFound("Cart not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Cart not found with id: " + id));
     }
     @Override
     public Cart save(Cart cart) {
@@ -103,7 +102,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void clearUserCart(User user) {
         Cart cart = cartRepository.findByUser(user)
-                .orElseThrow(() -> new EntityNotFound("Cart not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
 
         cart.getCartItemList().clear();
     }

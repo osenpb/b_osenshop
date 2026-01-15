@@ -4,7 +4,7 @@ import com.osen.ecommerce.auth.application.mappers.AuthMapper;
 import com.osen.ecommerce.auth.domain.models.User;
 import com.osen.ecommerce.auth.domain.repository.UserRepository;
 import com.osen.ecommerce.auth.application.dtos.UserResponse;
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
+import com.osen.ecommerce.common.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFound("User  not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("User  not found with id: " + id));
     }
     @Override
     public UserResponse save(User user) {

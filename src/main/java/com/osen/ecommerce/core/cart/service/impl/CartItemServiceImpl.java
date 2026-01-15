@@ -1,10 +1,9 @@
 package com.osen.ecommerce.core.cart.service.impl;
 
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
+import com.osen.ecommerce.common.exceptions.EntityNotFoundException;
 import com.osen.ecommerce.core.cart.models.CartItem;
 import com.osen.ecommerce.core.cart.repositories.CartItemRepository;
 import com.osen.ecommerce.core.cart.service.CartItemService;
-import com.osen.ecommerce.core.cart.service.CartService;
 import com.osen.ecommerce.core.product.model.Product;
 import com.osen.ecommerce.core.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -45,7 +44,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public Optional<CartItem> findByCart_IdAndProduct_Id(Long cartId, Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new EntityNotFound("Product not fount with id: " + productId));
+                .orElseThrow(()-> new EntityNotFoundException("Product not fount with id: " + productId));
         return cartItemRepository.findByCart_IdAndProduct_Id(cartId, productId);
     }
 

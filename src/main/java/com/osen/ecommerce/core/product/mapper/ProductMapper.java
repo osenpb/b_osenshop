@@ -48,7 +48,7 @@ public class ProductMapper {
     }
 
 
-    // NOTA: pongo void porque no se debe devolver una entiedad, no debe devolver entidades un update xq genera bugs
+    // NOTA: pongo void porque no se debe devolver una entidad, no debe devolver entidades un update xq genera bugs
     // y se pierde del contexto de persistencia del JPA
     public static void toEntity(UpdateProductRequest productRequest, Category category) {
 

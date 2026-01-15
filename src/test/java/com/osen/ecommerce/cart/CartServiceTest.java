@@ -1,10 +1,9 @@
 package com.osen.ecommerce.cart;
 
 
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
+import com.osen.ecommerce.common.exceptions.EntityNotFoundException;
 import com.osen.ecommerce.core.cart.models.CartItem;
 import com.osen.ecommerce.core.cart.repositories.CartItemRepository;
-import com.osen.ecommerce.core.cart.service.CartItemService;
 import com.osen.ecommerce.core.cart.service.impl.CartItemServiceImpl;
 import com.osen.ecommerce.core.product.model.Product;
 import com.osen.ecommerce.core.product.repository.ProductRepository;
@@ -65,7 +64,7 @@ public class CartServiceTest {
         when(productRepository.findById(productId))
                 .thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFound.class, () ->
+        assertThrows(EntityNotFoundException.class, () ->
                 cartItemService.findByCart_IdAndProduct_Id(cartId, productId)
         );
 

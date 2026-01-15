@@ -62,4 +62,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().build();
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> entityNotFound(Exception exception){
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                exception.getMessage(),
+                "Entidad no encontrada"
+        );
+        return ResponseEntity.notFound().build();
+    }
 }

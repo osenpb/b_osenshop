@@ -8,20 +8,17 @@ import com.osen.ecommerce.auth.domain.services.AuthService;
 import com.osen.ecommerce.auth.application.dtos.RegisterRequest;
 import com.osen.ecommerce.auth.application.dtos.LoginRequest;
 import com.osen.ecommerce.auth.domain.services.UserService;
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
-import jakarta.persistence.EntityNotFoundException;
+import com.osen.ecommerce.common.exceptions.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Optional;
 
 
 @Slf4j
@@ -48,7 +45,7 @@ public class AuthController {
 
         User user = userService.findByEmail(loginRequestDTO.email())
                 .orElseThrow(() ->
-                        new EntityNotFound("User not found with email " + loginRequestDTO.email())
+                        new EntityNotFoundException("User not found with email " + loginRequestDTO.email())
                 );
 
         UserResponse userResponse = AuthMapper.toDto(user);
@@ -69,7 +66,7 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(@AuthenticationPrincipal User user) {
-        User me = userService.findByEmail(user.getEmail()).orElseThrow(() -> new EntityNotFound("User not found with email " + user.getEmail()));
+        User me = userService.findByEmail(user.getEmail()).orElseThrow(() -> new EntityNotFoundException("User not found with email " + user.getEmail()));
         log.info("Usuario encontrado con nombre: " + me.getFirstName());
         UserResponse userResponse = AuthMapper.toDto(me);
         return ResponseEntity.ok(userResponse);
@@ -78,15 +75,15 @@ public class AuthController {
     @GetMapping("/check-status")
     public ResponseEntity<AuthResponse> checkStatus(
             @AuthenticationPrincipal User user,
-            HttpServletRequest request) throws EntityNotFoundException {
+            HttpServletRequest request) {
 
         // cuando la primera vez se chequea la existencia de un token
         if (user == null || user.getEmail() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        User myUser = userService.findByEmail(user.getEmail()).orElseThrow(() -> new EntityNotFound("User not found with email " + user.getEmail()));
-        log.info("User encontrado: {}", user.getFirstName());
+        User myUser = userService.findByEmail(user.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email " + user.getEmail()));
         UserResponse userResponse = AuthMapper.toDto(myUser);
 
         String token = request.getHeader("Authorization")

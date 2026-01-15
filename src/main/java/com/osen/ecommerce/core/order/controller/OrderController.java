@@ -3,9 +3,6 @@ package com.osen.ecommerce.core.order.controller;
 import com.osen.ecommerce.auth.domain.models.User;
 import com.osen.ecommerce.auth.domain.services.UserService;
 import com.osen.ecommerce.common.exceptions.AccessDeniedException;
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
-import com.osen.ecommerce.core.cart.models.Cart;
-import com.osen.ecommerce.core.cart.models.CartItem;
 import com.osen.ecommerce.core.cart.service.CartItemService;
 import com.osen.ecommerce.core.cart.service.CartService;
 import com.osen.ecommerce.core.order.dtos.OrderFormRequest;
@@ -17,7 +14,6 @@ import com.osen.ecommerce.core.order.models.Order;
 import com.osen.ecommerce.core.order.models.OrderItem;
 import com.osen.ecommerce.core.order.services.OrderItemService;
 import com.osen.ecommerce.core.order.services.OrderService;
-import com.osen.ecommerce.core.product.model.Product;
 import com.osen.ecommerce.core.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor

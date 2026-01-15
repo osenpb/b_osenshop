@@ -41,7 +41,6 @@ public class SecurityConfig {
                         .requestMatchers(String.format("%s/cart/**", API_VERSION)).hasRole("USER")
                         .requestMatchers(String.format("%s/orders/**", API_VERSION)).authenticated()
                         .requestMatchers(String.format("%s/categories/**", API_VERSION)).authenticated()
-                        .requestMatchers(HttpMethod.GET, String.format("%s/products", API_VERSION)).permitAll()
                         .requestMatchers(String.format("%s/products/**", API_VERSION)).permitAll()
                         .anyRequest().authenticated()
                 )//registra el filtro ANTES del de login por formulario

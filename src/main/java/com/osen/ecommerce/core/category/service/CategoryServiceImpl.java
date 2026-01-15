@@ -2,7 +2,7 @@ package com.osen.ecommerce.core.category.service;
 
 import com.osen.ecommerce.core.category.model.Category;
 import com.osen.ecommerce.core.category.repository.CategoryRepository;
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
+import com.osen.ecommerce.common.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public Category findById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFound("Category not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
     }
     @Override
     public Category save(Category category) {

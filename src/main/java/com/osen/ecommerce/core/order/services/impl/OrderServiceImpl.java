@@ -2,7 +2,6 @@ package com.osen.ecommerce.core.order.services.impl;
 
 import com.osen.ecommerce.auth.domain.models.User;
 import com.osen.ecommerce.common.exceptions.InsufficientStockException;
-import com.osen.ecommerce.core.cart.models.Cart;
 import com.osen.ecommerce.core.cart.models.CartItem;
 import com.osen.ecommerce.core.cart.service.CartItemService;
 import com.osen.ecommerce.core.cart.service.CartService;
@@ -13,20 +12,16 @@ import com.osen.ecommerce.core.order.repository.OrderRepository;
 import com.osen.ecommerce.core.order.services.OrderItemService;
 import com.osen.ecommerce.core.order.services.OrderService;
 
-import com.osen.ecommerce.common.exceptions.EntityNotFound;
+import com.osen.ecommerce.common.exceptions.EntityNotFoundException;
 import com.osen.ecommerce.core.product.model.Product;
 import com.osen.ecommerce.core.product.repository.ProductRepository;
 import com.osen.ecommerce.core.product.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -48,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order findById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFound("Order not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + id));
     }
     @Override
     public Order save(Order order) {
