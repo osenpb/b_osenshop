@@ -66,7 +66,7 @@ public class ProductController {
 
 
     @GetMapping("/pageable")
-    public ResponseEntity<Page<ProductResponse>> getAllProductsPageable(@PageableDefault(size = 6) Pageable pageable) {
+    public ResponseEntity<Page<ProductResponse>> getAllProductsPageable(@PageableDefault(size = 9) Pageable pageable) {
 
         Page<ProductResponse> page =
                 productService.findAllPageable(pageable)

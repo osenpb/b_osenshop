@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +46,8 @@ public class AuthController {
 
         User user = userService.findByEmail(loginRequestDTO.email())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("User not found with email " + loginRequestDTO.email())
-                );
-
+                        new BadCredentialsException("Credenciales inválidas"));
+        
         UserResponse userResponse = AuthMapper.toDto(user);
 
         AuthResponse authResponse = new AuthResponse(userResponse, tokens);
