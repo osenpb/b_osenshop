@@ -1,4 +1,4 @@
-package com.osen.osenshop.auth.infrastructure.controllers;
+package com.osen.osenshop.auth.controllers;
 
 import com.osen.osenshop.auth.application.dtos.AuthResponse;
 import com.osen.osenshop.auth.application.dtos.UserResponse;
