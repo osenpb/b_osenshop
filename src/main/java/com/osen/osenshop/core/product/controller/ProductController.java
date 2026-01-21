@@ -45,8 +45,9 @@ public class ProductController {
     }
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<?> saveProduct(@Valid CreateProductRequest productRequest) {
-        return null;
+    public ResponseEntity<?> saveProduct(@RequestBody CreateProductRequest productRequest) {
+        productService.save(productRequest);
+        return ResponseEntity.accepted().build();
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

@@ -9,6 +9,7 @@ import com.osen.osenshop.core.product.repository.ProductRepository;
 import com.osen.osenshop.common.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
 
@@ -34,9 +37,15 @@ public class ProductServiceImpl implements ProductService{
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
     }
     @Override
+    @Transactional
     public Product save(CreateProductRequest productRequest) {
 
+        if (productRequest.categoryId() == null) {
+            throw new IllegalArgumentException("El ID de la categoría es obligatorio");
+        }
+
         Category category = categoryService.findById(productRequest.categoryId());
+        log.info("Categoria encontrada {}", category.getName());
         Product product = new Product(
                 null,
                 productRequest.name(),
@@ -48,7 +57,7 @@ public class ProductServiceImpl implements ProductService{
                 true,
                 category
         );
-
+        log.info("Producto creado");
         return productRepository.save(product);
     }
     @Override
