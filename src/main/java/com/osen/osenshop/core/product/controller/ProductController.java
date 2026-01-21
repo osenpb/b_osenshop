@@ -8,8 +8,9 @@ import com.osen.osenshop.core.product.mapper.ProductMapper;
 import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.service.ProductService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-@Slf4j
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     private final ProductService productService;
     private final CategoryService categoryService;

@@ -8,8 +8,9 @@ import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.repository.ProductRepository;
 import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,18 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-
 @Service
-@Slf4j
-@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
+
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+
+    public ProductServiceImpl(ProductRepository productRepository, CategoryService categoryService) {
+        this.productRepository = productRepository;
+        this.categoryService = categoryService;
+    }
 
     @Override
     public List<Product> findAll() {

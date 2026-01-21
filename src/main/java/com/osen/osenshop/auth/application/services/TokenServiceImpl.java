@@ -7,6 +7,8 @@ import com.osen.osenshop.auth.domain.services.TokenService;
 import com.osen.osenshop.common.handler_exception.exceptions.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,8 +23,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
 public class TokenServiceImpl implements TokenService {
 
@@ -37,8 +37,16 @@ public class TokenServiceImpl implements TokenService {
 
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
-
     private final UserRepository userRepository;
+
+    private final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
+
+
+    public TokenServiceImpl(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder, UserRepository userRepository) {
+        this.jwtEncoder = jwtEncoder;
+        this.jwtDecoder = jwtDecoder;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public String generateToken(Authentication authentication) {
@@ -114,10 +122,12 @@ public class TokenServiceImpl implements TokenService {
             String newAccessToken = generateToken(
                     new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
 
+            String newRefreshToken = generateRefreshToken(user);
+
             return Map.of(
-                    "token", newAccessToken);
-            // la idea es que el front reemplace el token con el newAccessToken
-            // pero mantena el refresh en el front para que pueda expirar
+                    "accessToken", newAccessToken,
+                    "refreshToken", newRefreshToken);
+
 
         } catch (RuntimeException e) {
             throw new RuntimeException(e);

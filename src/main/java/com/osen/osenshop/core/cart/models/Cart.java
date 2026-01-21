@@ -3,12 +3,10 @@ package com.osen.osenshop.core.cart.models;
 
 import com.osen.osenshop.auth.domain.models.User;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "carts")
 public class Cart {
@@ -28,4 +26,28 @@ public class Cart {
         return  cartItemList.stream().mapToDouble(CartItem::subTotal).sum();
     }
 
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<CartItem> getCartItemList() {
+        return cartItemList;
+    }
+
+    public void setCartItemList(List<CartItem> cartItemList) {
+        this.cartItemList = cartItemList;
+    }
 }

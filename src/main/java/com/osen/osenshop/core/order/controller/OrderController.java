@@ -15,9 +15,9 @@ import com.osen.osenshop.core.order.models.OrderItem;
 import com.osen.osenshop.core.order.services.OrderItemService;
 import com.osen.osenshop.core.order.services.OrderService;
 import com.osen.osenshop.core.product.service.ProductService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     private final UserService userService;
     private final ProductService productService;
@@ -37,6 +37,15 @@ public class OrderController {
     private final CartItemService cartItemService;
     private final OrderService orderService;
     private final OrderItemService orderItemService;
+
+    public OrderController(UserService userService, ProductService productService, CartService cartService, CartItemService cartItemService, OrderService orderService, OrderItemService orderItemService) {
+        this.userService = userService;
+        this.productService = productService;
+        this.cartService = cartService;
+        this.cartItemService = cartItemService;
+        this.orderService = orderService;
+        this.orderItemService = orderItemService;
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping

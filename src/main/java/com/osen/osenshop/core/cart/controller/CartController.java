@@ -13,8 +13,9 @@ import com.osen.osenshop.core.cart.service.CartItemService;
 import com.osen.osenshop.core.cart.service.CartService;
 import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.service.ProductService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +24,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Slf4j
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/cart")
 public class CartController {
+
+    private static final Logger log = LoggerFactory.getLogger(CartController.class);
 
     private final CartService cartService;
     private final CartItemService cartItemService;
     private final UserService userService;
     private final ProductService productService;
+
+    public CartController(CartService cartService, CartItemService cartItemService, UserService userService, ProductService productService) {
+        this.cartService = cartService;
+        this.cartItemService = cartItemService;
+        this.userService = userService;
+        this.productService = productService;
+    }
 
 
     @GetMapping

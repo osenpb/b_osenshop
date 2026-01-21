@@ -9,8 +9,9 @@ import com.osen.osenshop.auth.domain.services.TokenService;
 import com.osen.osenshop.auth.application.dtos.RegisterRequest;
 import com.osen.osenshop.auth.application.dtos.LoginRequest;
 import com.osen.osenshop.common.handler_exception.exceptions.TokenExpiredException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
@@ -22,15 +23,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService, UserDetailsService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationConfiguration authenticationConfiguration;
+
+    public AuthServiceImpl(UserRepository userRepository, TokenService tokenService, PasswordEncoder passwordEncoder, AuthenticationConfiguration authenticationConfiguration) {
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
 
 
     @Override

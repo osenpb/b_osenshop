@@ -7,18 +7,22 @@ import com.osen.osenshop.core.cart.service.CartItemService;
 import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
+
+    public CartItemServiceImpl(CartItemRepository cartItemRepository, ProductRepository productRepository) {
+        this.cartItemRepository = cartItemRepository;
+        this.productRepository = productRepository;
+    }
 
     @Override
     public List<CartItem> findAll() {

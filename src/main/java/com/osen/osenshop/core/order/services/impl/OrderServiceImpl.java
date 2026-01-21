@@ -17,16 +17,17 @@ import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.repository.ProductRepository;
 import com.osen.osenshop.core.product.service.ProductService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final OrderRepository orderRepository;
     private final ProductService productService;
@@ -34,6 +35,15 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemService cartItemService;
     private final OrderItemService orderItemService;
     private final ProductRepository productRepository;
+
+    public OrderServiceImpl(OrderRepository orderRepository, ProductService productService, CartService cartService, CartItemService cartItemService, OrderItemService orderItemService, ProductRepository productRepository) {
+        this.orderRepository = orderRepository;
+        this.productService = productService;
+        this.cartService = cartService;
+        this.cartItemService = cartItemService;
+        this.orderItemService = orderItemService;
+        this.productRepository = productRepository;
+    }
 
     @Override
     public List<Order> findAll() {

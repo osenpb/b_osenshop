@@ -12,21 +12,28 @@ import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundExcep
 import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.service.ProductService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
+
+    private static final Logger log = LoggerFactory.getLogger(CartServiceImpl.class);
 
     private final CartRepository cartRepository;
     private final CartItemService cartItemService;
     private final ProductService productService;
+
+    public CartServiceImpl(CartRepository cartRepository, CartItemService cartItemService, ProductService productService) {
+        this.cartRepository = cartRepository;
+        this.cartItemService = cartItemService;
+        this.productService = productService;
+    }
 
 
     @Override
