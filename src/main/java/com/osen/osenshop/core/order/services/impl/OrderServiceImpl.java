@@ -123,10 +123,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateStatusOrder(Long orderId) {
         Order order = findById(orderId);
-        if(order.getStatus().equals("PENDING")){ order.setStatus("DELIVERED"); }
-        if(order.getStatus().equals("DELIVERED")){ order.setStatus("PENDING"); }
-        save(order);
+        if (order.getStatus().equals("PENDING")) {
+            order.setStatus("DELIVERED");
+        } else if (order.getStatus().equals("DELIVERED")) {
+            order.setStatus("PENDING");
+        }
 
+        save(order);
     }
 
 

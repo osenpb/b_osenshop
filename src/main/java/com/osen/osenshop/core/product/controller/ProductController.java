@@ -10,6 +10,7 @@ import com.osen.osenshop.core.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -91,5 +92,7 @@ public class ProductController {
 
         return ResponseEntity.ok(response);
     }
+
+
 
 }

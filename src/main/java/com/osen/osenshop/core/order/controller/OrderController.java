@@ -84,7 +84,7 @@ public class OrderController {
         return ResponseEntity.ok(orderResponseList);
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/update-status")
+    @PostMapping("/update-status")
     public ResponseEntity<?> updateStatusOrder(@RequestBody Long orderId){
         orderService.updateStatusOrder(orderId);
         return ResponseEntity.ok().build();
