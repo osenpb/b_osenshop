@@ -60,7 +60,6 @@ public class OrderController {
     @GetMapping("/order-success/{id}")
     public ResponseEntity<?> confirmacionPedido(@AuthenticationPrincipal User user, @PathVariable Long id) {
 
-        // Validaciones tipicas de seguridad
         Order order = orderService.findById(id);
 
         if (!order.getUser().getId().equals(user.getId())) {
