@@ -8,7 +8,7 @@ import com.osen.osenshop.auth.domain.services.AuthService;
 import com.osen.osenshop.auth.application.dtos.RegisterRequest;
 import com.osen.osenshop.auth.application.dtos.LoginRequest;
 import com.osen.osenshop.auth.domain.services.UserService;
-import com.osen.osenshop.common.exceptions.EntityNotFoundException;
+import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

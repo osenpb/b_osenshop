@@ -1,6 +1,10 @@
-package com.osen.osenshop.common.exceptions;
+package com.osen.osenshop.common.handler_exception;
 
 
+import com.osen.osenshop.common.handler_exception.exceptions.AccessDeniedException;
+import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
+import com.osen.osenshop.common.handler_exception.exceptions.InsufficientStockException;
+import com.osen.osenshop.common.handler_exception.exceptions.TokenExpiredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

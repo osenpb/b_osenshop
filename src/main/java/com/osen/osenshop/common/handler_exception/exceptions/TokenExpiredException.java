@@ -1,4 +1,4 @@
-package com.osen.osenshop.common.exceptions;
+package com.osen.osenshop.common.handler_exception.exceptions;
 
 public class TokenExpiredException extends RuntimeException{
 

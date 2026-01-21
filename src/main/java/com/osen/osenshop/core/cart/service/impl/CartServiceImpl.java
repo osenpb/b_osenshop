@@ -2,13 +2,13 @@ package com.osen.osenshop.core.cart.service.impl;
 
 
 import com.osen.osenshop.auth.domain.models.User;
-import com.osen.osenshop.common.exceptions.InsufficientStockException;
+import com.osen.osenshop.common.handler_exception.exceptions.InsufficientStockException;
 import com.osen.osenshop.core.cart.models.Cart;
 import com.osen.osenshop.core.cart.models.CartItem;
 import com.osen.osenshop.core.cart.repositories.CartRepository;
 import com.osen.osenshop.core.cart.service.CartItemService;
 import com.osen.osenshop.core.cart.service.CartService;
-import com.osen.osenshop.common.exceptions.EntityNotFoundException;
+import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.service.ProductService;
 import jakarta.transaction.Transactional;

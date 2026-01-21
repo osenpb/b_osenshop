@@ -6,7 +6,7 @@ import com.osen.osenshop.core.product.dtos.CreateProductRequest;
 import com.osen.osenshop.core.product.dtos.UpdateProductRequest;
 import com.osen.osenshop.core.product.model.Product;
 import com.osen.osenshop.core.product.repository.ProductRepository;
-import com.osen.osenshop.common.exceptions.EntityNotFoundException;
+import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

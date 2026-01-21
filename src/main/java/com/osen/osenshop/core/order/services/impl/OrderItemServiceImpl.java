@@ -3,7 +3,7 @@ package com.osen.osenshop.core.order.services.impl;
 import com.osen.osenshop.core.order.models.OrderItem;
 import com.osen.osenshop.core.order.repository.OrderItemRepository;
 import com.osen.osenshop.core.order.services.OrderItemService;
-import com.osen.osenshop.common.exceptions.EntityNotFoundException;
+import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

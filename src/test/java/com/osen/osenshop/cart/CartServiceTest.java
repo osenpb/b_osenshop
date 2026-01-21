@@ -1,7 +1,7 @@
 package com.osen.osenshop.cart;
 
 
-import com.osen.osenshop.common.exceptions.EntityNotFoundException;
+import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import com.osen.osenshop.core.cart.models.CartItem;
 import com.osen.osenshop.core.cart.repositories.CartItemRepository;
 import com.osen.osenshop.core.cart.service.impl.CartItemServiceImpl;

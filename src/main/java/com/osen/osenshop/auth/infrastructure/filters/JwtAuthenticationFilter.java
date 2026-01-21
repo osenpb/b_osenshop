@@ -1,7 +1,7 @@
 package com.osen.osenshop.auth.infrastructure.filters;
 
 import com.osen.osenshop.auth.domain.services.AuthService;
-import com.osen.osenshop.common.exceptions.TokenExpiredException;
+import com.osen.osenshop.common.handler_exception.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 

@@ -2,7 +2,7 @@ package com.osen.osenshop.core.order.controller;
 
 import com.osen.osenshop.auth.domain.models.User;
 import com.osen.osenshop.auth.domain.services.UserService;
-import com.osen.osenshop.common.exceptions.AccessDeniedException;
+import com.osen.osenshop.common.handler_exception.exceptions.AccessDeniedException;
 import com.osen.osenshop.core.cart.service.CartItemService;
 import com.osen.osenshop.core.cart.service.CartService;
 import com.osen.osenshop.core.order.dtos.OrderFormRequest;

@@ -4,7 +4,7 @@ import com.osen.osenshop.auth.domain.models.User;
 import com.osen.osenshop.auth.domain.repository.UserRepository;
 import com.osen.osenshop.auth.domain.services.TokenService;
 
-import com.osen.osenshop.common.exceptions.TokenExpiredException;
+import com.osen.osenshop.common.handler_exception.exceptions.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

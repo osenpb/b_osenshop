@@ -1,6 +1,5 @@
 package com.osen.osenshop.core.product.controller;
 
-import com.osen.osenshop.common.exceptions.EntityNotFoundException;
 import com.osen.osenshop.core.category.service.CategoryService;
 import com.osen.osenshop.core.product.dtos.CreateProductRequest;
 import com.osen.osenshop.core.product.dtos.ProductResponse;

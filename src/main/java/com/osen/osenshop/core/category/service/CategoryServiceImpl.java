@@ -2,7 +2,7 @@ package com.osen.osenshop.core.category.service;
 
 import com.osen.osenshop.core.category.model.Category;
 import com.osen.osenshop.core.category.repository.CategoryRepository;
-import com.osen.osenshop.common.exceptions.EntityNotFoundException;
+import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
