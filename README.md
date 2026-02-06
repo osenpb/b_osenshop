@@ -7,7 +7,7 @@ Además cumple con principios SOLID.
 
 El repositorio frontend que consume este proyecto se encuentra en: https://github.com/osenpb/f_osenshop
 
-## 🚀 Tecnologías principales
+## Tecnologías principales
 
 - Java 21
 - Spring Boot
@@ -19,7 +19,7 @@ El repositorio frontend que consume este proyecto se encuentra en: https://githu
 - Base de datos: PostgreSQL
 - Docker
 
-## 🔐 Seguridad y Autenticación
+## Seguridad y Autenticación
 
 El módulo de autenticación sigue principios de Clean Architecture, separando claramente:
 
@@ -35,7 +35,7 @@ El módulo de autenticación sigue principios de Clean Architecture, separando c
 - Separación de responsabilidades entre capas
 - Manejo centralizado de errores de seguridad
 
-## 🧩 Arquitectura del proyecto
+## Arquitectura del proyecto
 
 Enfoque híbrido
 
@@ -58,21 +58,21 @@ Incluye:
 - DTOs de request y response
 - Conversión explícita entre entidades y DTOs
 
-### ⚠️ Manejo de Excepciones
+### Manejo de Excepciones
 
 - Excepciones personalizadas por dominio
 - @ControllerAdvice para manejo global
 - Respuestas de error claras y consistentes
 
 
-### 📄 Paginación
+### Paginación
 
 - La API implementa paginación usando la clase Pageable de Spring.
 - Soporte para page, size y sort.
 - Respuestas optimizadas para listados grandes.
 - Compatible con frontend moderno.
 
-## 🧪 Enfoque del proyecto
+## Enfoque del proyecto
 
 OsenShop está diseñado como:
 
@@ -87,7 +87,7 @@ Especial énfasis en:
 - Escalabilidad
 - Legibilidad del código
 
-## 📌 Próximas mejoras
+## Próximas mejoras
 
 - Tests unitarios y de integración.
 - Integración de OAuth2.
