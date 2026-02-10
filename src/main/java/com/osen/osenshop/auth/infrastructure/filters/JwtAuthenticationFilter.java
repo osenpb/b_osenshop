@@ -5,6 +5,7 @@ import com.osen.osenshop.common.handler_exception.exceptions.TokenExpiredExcepti
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Component
@@ -34,59 +36,48 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) throws ServletException, IOException, TokenExpiredException {
-        
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
-        if (shouldNotFilter(request)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        Optional<String> tokenOptional = resolveTokenFromCookie(request);
 
+        try {
+            if (tokenOptional.isPresent()) {
+                String token = tokenOptional.get();
 
-    try {
+                // Solo procesamos si el token es válido y no hay autenticación previa
+                if (authService.validateToken(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    String userName = authService.getUserFromToken(token);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
-        final Optional<String> token = resolveTokenFromHeader(request);
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities());
 
-            // Si no hay token o es inválido, que Spring Security maneje la autorización
-            if (token.isEmpty() || !authService.validateToken(token.get())) {
-                filterChain.doFilter(request, response);
-                return;
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
             }
-
-
-        String userName = authService.getUserFromToken(token.get());
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities());
-
-        authenticationToken.setDetails(userDetails);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-    } catch (TokenExpiredException e) {
-        log.warn("Token expirado: {}", e.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expirado");
-        return;
-
-    }catch (Exception e) {
-        log.error("Error autenticando JWT", e);
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
-        return;
-    }
+        } catch (TokenExpiredException e) {
+            log.warn("Token expirado: {}", e.getMessage());
+            // Opcional: No envíes error aquí si quieres que permitAll funcione
+            // Solo limpia el contexto si es necesario
+        } catch (Exception e) {
+            log.error("Error procesando JWT en el filtro", e);
+            // No bloqueamos la cadena de filtros, dejamos que la seguridad decida después
+        }
         filterChain.doFilter(request, response);
     }
 
     //si en lugar de gestionar mediante cookies quieres hacerlo con authorization, solo cambias este metodo
-    private Optional<String> resolveTokenFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return Optional.of(bearerToken.substring(7)); // quitar "Bearer "
-        }
-        return Optional.empty();
+    private Optional<String> resolveTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() == null) return Optional.empty();
+
+        return java.util.Arrays.stream(request.getCookies())
+                .filter(cookie -> "access_token".equals(cookie.getName()))
+                .map(jakarta.servlet.http.Cookie::getValue)
+                .findFirst();
     }
 }

@@ -1,5 +1,6 @@
 package com.osen.osenshop.auth.infrastructure.config;
 
+import com.osen.osenshop.auth.infrastructure.filters.CsrfCookieFilter;
 import com.osen.osenshop.auth.infrastructure.filters.JwtAuthenticationFilter;
 
 import org.springframework.context.annotation.Bean;
@@ -36,11 +37,15 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
+//                        csrf -> csrf
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+//                        .ignoringRequestMatchers("/api/v1/auth/**"))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(String.format("%s/auth/**", API_VERSION)).permitAll()
-                        .requestMatchers(String.format("%s/admin/**", API_VERSION)).hasRole("ADMIN") //hasRole("ADMIN")
+                        .requestMatchers(String.format("%s/admin/**", API_VERSION)).hasRole("ADMIN")
                         .requestMatchers(String.format("%s/users/**", API_VERSION)).authenticated() //hasRole("ADMIN")
                         .requestMatchers(String.format("%s/cart/**", API_VERSION)).hasRole("USER")
                         .requestMatchers(String.format("%s/orders/**", API_VERSION)).authenticated()
@@ -50,6 +55,7 @@ public class SecurityConfig {
                 )//registra el filtro ANTES del de login por formulario
 //                .oauth2Login(Customizer.withDefaults()) // para registro OAuth2
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+              //  .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
         return http.build();
     }
 
@@ -57,8 +63,5 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
-
-
 }
 

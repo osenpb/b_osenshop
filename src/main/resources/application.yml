@@ -15,7 +15,7 @@ spring:
     jpa:
       hibernate:
         ddl-auto: update
-      show-sql: true
+      show-sql: ${SHOW_SQL:false}
       defer-datasource-initialization: true
 
     sql:
@@ -28,7 +28,10 @@ application:
     jwt:
       secret-key: ${JWT_SECRET}
       expiration: 30 # minutes
-      refresh-expiration: 300
+      refresh-expiration: 300 # minutes
+    cookies:
+      secure: ${COOKIES_SECURE:false}  # true en HTTPS/producción
+      same-site: ${COOKIES_SAME_SITE:Lax}  # None para HTTPS+CORS, Lax para local
 
 #    oauth2:
 #      client:
@@ -36,13 +39,6 @@ application:
 #          google:
 #            client-id: ###
 #            client-secret:
-
-
-logging:
-  level:
-    com:
-      zaxxer:
-        hikari=DEBUG:
 
 server:
   port: ${PORT:8080}

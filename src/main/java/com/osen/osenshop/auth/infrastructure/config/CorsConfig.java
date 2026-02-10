@@ -7,8 +7,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
-// Esta config se aplica sola, no tiene q agregar nd al securityConfig y es reutilizable para otros proyectos
 @Configuration
 public class CorsConfig {
 
@@ -16,22 +16,36 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        //Arrays.asList("http://localhost:4200"
+        // Obtener orígenes permitidos de variable de entorno
+        String allowedOriginsEnv = System.getenv("ALLOWED_ORIGINS");
+        List<String> allowedOrigins = allowedOriginsEnv != null
+            ? Arrays.asList(allowedOriginsEnv.split(","))
+            : Arrays.asList(
+                "http://localhost:4200",
+                "http://localhost:5173"  // Vite default
+            );
+
+        configuration.setAllowedOrigins(allowedOrigins);
 
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
         ));
 
-        // Headers permitidos
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Type",
                 "X-Requested-With",
                 "Accept",
                 "Origin"
+//                "X-XRSF-TOKEN",
+//                "XRSF-TOKEN"
         ));
-        // Permitir credentials (cookies, authorization headers), aunque si es stateless esto podria ser false
+
+        configuration.setExposedHeaders(Arrays.asList(
+                "Authorization",
+                "Set-Cookie"
+        ));
+
         configuration.setAllowCredentials(true);
 
         // Cuánto tiempo el navegador cachea la respuesta preflight
