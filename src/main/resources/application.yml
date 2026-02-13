@@ -27,8 +27,8 @@ application:
   security:
     jwt:
       secret-key: ${JWT_SECRET}
-      expiration: 30 # minutes
-      refresh-expiration: 300 # minutes
+      expiration: 30 # minutos
+      refresh-expiration: 300 # minutos
     cookies:
       secure: ${COOKIES_SECURE:false}  # true en HTTPS/producción
       same-site: ${COOKIES_SAME_SITE:Lax}  # None para HTTPS+CORS, Lax para local

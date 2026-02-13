@@ -1,13 +1,11 @@
 package com.osen.osenshop.auth.controllers;
 
-import com.osen.osenshop.auth.application.dtos.AuthResponse;
-import com.osen.osenshop.auth.application.dtos.UserResponse;
+import com.osen.osenshop.auth.application.dtos.*;
 import com.osen.osenshop.auth.application.mappers.AuthMapper;
 import com.osen.osenshop.auth.domain.models.User;
 import com.osen.osenshop.auth.domain.services.AuthService;
-import com.osen.osenshop.auth.application.dtos.RegisterRequest;
-import com.osen.osenshop.auth.application.dtos.LoginRequest;
 import com.osen.osenshop.auth.domain.services.CookieService;
+import com.osen.osenshop.auth.domain.services.TokenService;
 import com.osen.osenshop.auth.domain.services.UserService;
 import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
@@ -34,11 +32,14 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
     private final CookieService cookieService;
+    private final TokenService tokenService;
 
-    public AuthController(AuthService authService, UserService userService, CookieService cookieService) {
+
+    public AuthController(AuthService authService, UserService userService, CookieService cookieService, TokenService tokenService) {
         this.authService = authService;
         this.userService = userService;
         this.cookieService = cookieService;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/register")
@@ -67,11 +68,22 @@ public class AuthController {
 
 
     @PostMapping("/refresh")
-    public ResponseEntity<Map<String, String>> refresh(@RequestBody Map<String, String> request){
-        String refreshToken = request.get("refresh");
-        Map<String, String> newAccessToken = authService.refreshToken(refreshToken);
-        return ResponseEntity.ok(newAccessToken);
+    public ResponseEntity<Void> refresh(
+            @CookieValue(name = "refresh_token", required = false) String refreshToken,
+            HttpServletResponse response) {
 
+        if (refreshToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // genero nuevos tokens de rotacion
+        Map<String, String> tokens = tokenService.refreshToken(refreshToken);
+
+        // 3. Sobrescribir cookies
+        cookieService.addTokenCookies(response, tokens);
+        log.info("Nuevos tokens generados: " + tokens);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/logout")

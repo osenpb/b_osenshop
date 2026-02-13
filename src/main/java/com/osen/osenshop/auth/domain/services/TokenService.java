@@ -10,5 +10,8 @@ public interface TokenService {
     String getUserFromToken(String token);
     boolean validateToken(String token);
     String generateRefreshToken(User user);
+
     Map<String, String> refreshToken(String refreshToken);
+
 }
+

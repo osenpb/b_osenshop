@@ -2,12 +2,14 @@ package com.osen.osenshop.auth.domain.services;
 
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @Component
@@ -25,6 +27,8 @@ public class CookieService {
     @Value("${application.security.cookies.same-site:Lax}")
     private String sameSite;
 
+    private static final String REFRESH_TOKEN_NAME = "refresh_token";
+
     public void addTokenCookies(HttpServletResponse response, Map<String, String> tokens) {
         addCookie(response, "access_token", tokens.get("accessToken"), accessTokenExpiration);
         addCookie(response, "refresh_token", tokens.get("refreshToken"), refreshTokenExpiration);
@@ -35,13 +39,25 @@ public class CookieService {
                 .httpOnly(true)
                 .secure(isSecure)
                 .path("/")
-                .maxAge(expirationMinutes * 60)
+                .maxAge(expirationMinutes * 60L)
                 .sameSite(sameSite) // "Lax" es ideal para desarrollo
                 .build();
 
         // addHeader para que NO se sobreescriban entre ellas
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
+
+//    public String extrackRefreshToken(HttpServletRequest request){
+//        if (request.getCookies() == null){
+//            return null;
+//        }
+//            return Arrays.stream(request.getCookies())
+//                    .filter(cookie -> REFRESH_TOKEN_NAME.equals(cookie.getName()))
+//                    .map(Cookie::getValue)
+//                    .findFirst()
+//                    .orElse(null);
+//    }
+
 
     public void clearTokenCookies(HttpServletResponse response) {
         clearCookie(response, "access_token");
