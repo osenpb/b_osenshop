@@ -36,9 +36,9 @@ public class CorsConfig {
                 "Content-Type",
                 "X-Requested-With",
                 "Accept",
-                "Origin"
-//                "X-XRSF-TOKEN",
-//                "XRSF-TOKEN"
+                "Origin",
+                "X-XRSF-TOKEN",
+                "XRSF-TOKEN"
         ));
 
         configuration.setExposedHeaders(Arrays.asList(
