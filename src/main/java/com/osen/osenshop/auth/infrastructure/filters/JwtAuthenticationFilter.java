@@ -62,11 +62,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (TokenExpiredException e) {
             log.warn("Token expirado: {}", e.getMessage());
-                // Opcional: No envíes error aquí si quieres que permitAll funcione
-                // Solo limpia el contexto si es necesario
-            } catch (Exception e) {
-            log.error("Error procesando JWT en el filtro", e);
-            // No bloqueamos la cadena de filtros, dejamos que la seguridad decida después
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token expired");
+            return;
         }
         filterChain.doFilter(request, response);
     }

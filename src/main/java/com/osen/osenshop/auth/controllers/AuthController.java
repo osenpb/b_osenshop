@@ -68,7 +68,7 @@ public class AuthController {
 
 
     @PostMapping("/refresh")
-    public ResponseEntity<Void> refresh(
+    public ResponseEntity<UserResponse> refresh(
             @CookieValue(name = "refresh_token", required = false) String refreshToken,
             HttpServletResponse response) {
 
@@ -79,11 +79,16 @@ public class AuthController {
         // genero nuevos tokens de rotacion
         Map<String, String> tokens = tokenService.refreshToken(refreshToken);
 
-        // 3. Sobrescribir cookies
+        // 2. Sobrescribir cookies
         cookieService.addTokenCookies(response, tokens);
-        log.info("Nuevos tokens generados: " + tokens);
+        log.info("Nuevos tokens generados para usuario");
 
-        return ResponseEntity.ok().build();
+        // 3. Obtener datos del usuario para devolverlos
+        String email = tokenService.getUserFromToken(tokens.get("access"));
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Usuario no encontrado"));
+
+        return ResponseEntity.ok(AuthMapper.toDto(user));
     }
 
     @PostMapping("/logout")
@@ -113,8 +118,6 @@ public class AuthController {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email " + user.getEmail()));
         UserResponse userResponse = AuthMapper.toDto(myUser);
 
-        // El token viene en la cookie, no en Authorization header
-        // Si necesitas devolverlo, valida que exista primero
         String token = "";
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

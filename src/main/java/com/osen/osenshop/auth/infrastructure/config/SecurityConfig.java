@@ -36,11 +36,6 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(
                         AbstractHttpConfigurer::disable
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//                        .ignoringRequestMatchers(
-//                                "/api/v1/auth/login",
-//                                "/api/v1/auth/register"
-//                        )
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -53,9 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(String.format("%s/categories/**", API_VERSION)).authenticated()
                         .requestMatchers(String.format("%s/products/**", API_VERSION)).permitAll()
                         .anyRequest().authenticated()
-                )//registra el filtro ANTES del de login por formulario
-//                .oauth2Login(Customizer.withDefaults()) // para registro OAuth2
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
