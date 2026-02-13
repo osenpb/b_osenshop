@@ -62,16 +62,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (TokenExpiredException e) {
             log.warn("Token expirado: {}", e.getMessage());
-            // Opcional: No envíes error aquí si quieres que permitAll funcione
-            // Solo limpia el contexto si es necesario
-        } catch (Exception e) {
+                // Opcional: No envíes error aquí si quieres que permitAll funcione
+                // Solo limpia el contexto si es necesario
+            } catch (Exception e) {
             log.error("Error procesando JWT en el filtro", e);
             // No bloqueamos la cadena de filtros, dejamos que la seguridad decida después
         }
         filterChain.doFilter(request, response);
     }
 
-    //si en lugar de gestionar mediante cookies quieres hacerlo con authorization, solo cambias este metodo
     private Optional<String> resolveTokenFromCookie(HttpServletRequest request) {
         if (request.getCookies() == null) return Optional.empty();
 
