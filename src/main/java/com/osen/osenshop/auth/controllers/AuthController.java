@@ -1,15 +1,16 @@
 package com.osen.osenshop.auth.controllers;
 
-import com.osen.osenshop.auth.application.dtos.AuthResponse;
-import com.osen.osenshop.auth.application.dtos.UserResponse;
+import com.osen.osenshop.auth.application.dtos.*;
 import com.osen.osenshop.auth.application.mappers.AuthMapper;
 import com.osen.osenshop.auth.domain.models.User;
 import com.osen.osenshop.auth.domain.services.AuthService;
-import com.osen.osenshop.auth.application.dtos.RegisterRequest;
-import com.osen.osenshop.auth.application.dtos.LoginRequest;
+import com.osen.osenshop.auth.domain.services.CookieService;
+import com.osen.osenshop.auth.domain.services.TokenService;
 import com.osen.osenshop.auth.domain.services.UserService;
 import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -30,10 +31,15 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final CookieService cookieService;
+    private final TokenService tokenService;
 
-    public AuthController(AuthService authService, UserService userService) {
+
+    public AuthController(AuthService authService, UserService userService, CookieService cookieService, TokenService tokenService) {
         this.authService = authService;
         this.userService = userService;
+        this.cookieService = cookieService;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/register")
@@ -43,30 +49,52 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequestDTO) throws Exception {
+    public ResponseEntity<UserResponse> login(
+            @RequestBody @Valid LoginRequest loginRequestDTO,
+            HttpServletResponse response) throws Exception {
 
-        log.info("Email recibido: {}", loginRequestDTO.email());
-
+        // 1. Lógica de negocio: generar tokens
         Map<String, String> tokens = authService.login(loginRequestDTO);
 
+        // 2. Delegar la gestión de cookies (Uso de CookieService)
+        cookieService.addTokenCookies(response, tokens);
+
+        // 3. Obtener datos del usuario
         User user = userService.findByEmail(loginRequestDTO.email())
-                .orElseThrow(() ->
-                        new BadCredentialsException("Credenciales inválidas"));
-        
-        UserResponse userResponse = AuthMapper.toDto(user);
+                .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
 
-        AuthResponse authResponse = new AuthResponse(userResponse, tokens);
-
-        return ResponseEntity.ok(authResponse);
-
+        return ResponseEntity.ok(AuthMapper.toDto(user));
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<Map<String, String>> refresh(@RequestBody Map<String, String> request){
-        String refreshToken = request.get("refresh");
-        Map<String, String> newAccessToken = authService.refreshToken(refreshToken);
-        return ResponseEntity.ok(newAccessToken);
 
+    @PostMapping("/refresh")
+    public ResponseEntity<UserResponse> refresh(
+            @CookieValue(name = "refresh_token", required = false) String refreshToken,
+            HttpServletResponse response) {
+
+        if (refreshToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // genero nuevos tokens de rotacion
+        Map<String, String> tokens = tokenService.refreshToken(refreshToken);
+
+        // 2. Sobrescribir cookies
+        cookieService.addTokenCookies(response, tokens);
+        log.info("Nuevos tokens generados para usuario");
+
+        // 3. Obtener datos del usuario para devolverlos
+        String email = tokenService.getUserFromToken(tokens.get("access"));
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Usuario no encontrado"));
+
+        return ResponseEntity.ok(AuthMapper.toDto(user));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        cookieService.clearTokenCookies(response);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/me")
@@ -82,7 +110,6 @@ public class AuthController {
             @AuthenticationPrincipal User user,
             HttpServletRequest request) {
 
-        // cuando la primera vez se chequea la existencia de un token
         if (user == null || user.getEmail() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -91,13 +118,16 @@ public class AuthController {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email " + user.getEmail()));
         UserResponse userResponse = AuthMapper.toDto(myUser);
 
-        String token = request.getHeader("Authorization")
-                .substring(7);
-        log.info("token encontrado {}", token);
+        String token = "";
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+        }
+
         AuthResponse authResponse = new AuthResponse(
                 userResponse,
                 Map.of("accessToken", token,
-                        "refreshToken", "asd")
+                        "refreshToken", "")
         );
         return ResponseEntity.ok(authResponse);
     }

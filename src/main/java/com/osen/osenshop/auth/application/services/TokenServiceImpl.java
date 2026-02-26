@@ -102,36 +102,47 @@ public class TokenServiceImpl implements TokenService {
         return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
     }
 
-    // Para invocar al nuevo token usando como llave al refresh token, refresh token estatico
+    // para la rotacion de tokens
     @Override
     public Map<String, String> refreshToken(String refreshToken) {
         try {
+            // Decodificar (valida firma y expiración automáticamente)
             Jwt jwtRefreshToken = jwtDecoder.decode(refreshToken);
 
+            // Validar tipo
             String type = jwtRefreshToken.getClaim("type");
-
-            if(!"refresh".equals(type)){
-                log.info("type incorrecto: {}", type);
+            if (!"refresh".equals(type)) {
                 throw new JwtException("Invalid token type");
             }
 
+            // Extraer usuario
             String email = jwtRefreshToken.getSubject();
-            User user = userRepository.findByEmail(email).orElseThrow(
-                    ()-> new UsernameNotFoundException("Usuario no encontrado"));
 
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() ->
+                            new UsernameNotFoundException("Usuario no encontrado"));
+
+            // Genero nuevos tokens (rotación lógica)
             String newAccessToken = generateToken(
-                    new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+                    new UsernamePasswordAuthenticationToken(
+                            user,
+                            null,
+                            user.getAuthorities()
+                    )
+            );
 
             String newRefreshToken = generateRefreshToken(user);
 
             return Map.of(
-                    "accessToken", newAccessToken,
-                    "refreshToken", newRefreshToken);
+                    "access", newAccessToken,
+                    "refresh", newRefreshToken
+            );
 
-
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        } catch (JwtException e) {
+            throw new TokenExpiredException("Invalid or expired refresh token");
         }
     }
+
+
 }
 

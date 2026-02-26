@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.coyote.Response;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -61,7 +61,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProduct(){
+    public ResponseEntity<List<ProductResponse>> getAllProducts(){
         List<ProductResponse> productResponseList = productService.findAll().stream().map(ProductMapper::toDto).toList();
         return ResponseEntity.ok(productResponseList);
     }

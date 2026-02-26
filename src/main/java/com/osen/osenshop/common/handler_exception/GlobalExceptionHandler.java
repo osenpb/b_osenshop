@@ -1,6 +1,7 @@
 package com.osen.osenshop.common.handler_exception;
 
 
+import com.mercadopago.exceptions.MPApiException;
 import com.osen.osenshop.common.handler_exception.exceptions.AccessDeniedException;
 import com.osen.osenshop.common.handler_exception.exceptions.EntityNotFoundException;
 import com.osen.osenshop.common.handler_exception.exceptions.InsufficientStockException;
@@ -155,4 +156,11 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    @ExceptionHandler(MPApiException.class)
+    public ResponseEntity<?> handleMPException(MPApiException e) {
+        return ResponseEntity.status(500)
+                .body("Payment error: " + e.getMessage());
+    }
+
 }
