@@ -1,13 +1,14 @@
 # OsenShop
 
-OsenShop es una aplicación e‑commerce backend desarrollada con Java 21 y Spring Boot, enfocada en buenas prácticas de arquitectura, seguridad y diseño orientado a portafolio profesional.
+OsenShop is an e-commerce application built with Java 21 and Spring Boot for the backend, focused on clean architecture, security best practices, and portfolio-oriented design.
 
-El proyecto implementa autenticación basada en JWT, manejo de DTOs, excepciones personalizadas, filtros de Spring Security y paginación, combinando Clean Architecture para el módulo de autenticación y una arquitectura feature‑based para el resto del dominio.
-Además cumple con principios SOLID.
+The project implements JWT-based authentication, DTO handling, custom exceptions, Spring Security filters, and pagination. It combines Clean Architecture for the authentication module with a feature-based architecture for the rest of the domain.
+The project also follows SOLID principles.
 
-El repositorio frontend que consume este proyecto se encuentra en: https://github.com/osenpb/f_osenshop
+The frontend repository that consumes this backend can be found here:
+https://github.com/osenpb/f_osenshop
 
-## Tecnologías principales
+## Main Technologies
 
 - Java 21
 - Spring Boot
@@ -16,80 +17,78 @@ El repositorio frontend que consume este proyecto se encuentra en: https://githu
 - Hibernate
 - REST API
 - Maven
-- Base de datos: PostgreSQL
+- Database: PostgreSQL
 - Docker
 
-## Seguridad y Autenticación
+## Security and Authentication
 
-El módulo de autenticación sigue principios de Clean Architecture, separando claramente:
+The authentication module follows Clean Architecture principles, clearly separating:
 
-- Dominio: reglas de negocio y modelos centrales.
-- Aplicación: casos de uso (login, registro, validación).
-- Infraestructura: implementación de JWT, repositorios y seguridad.
-- Entrypoints: controladores REST.
+- **Domain**: Core business rules and models.
+- **Application**: Use cases (login, registration, validation).
+- **Infrastructure**: JWT implementation, repositories, and security configuration.
+- **Entrypoints**: REST controllers.
 
-## Características
+## Features
 
-- Autenticación y autorización mediante JWT.
-- Filtros personalizados de Spring Security.
-- Separación de responsabilidades entre capas.
-- Manejo centralizado de errores de seguridad.
-- Rotación de refresh tokens.
+- JWT-based authentication and authorization.
+- Custom Spring Security filters.
+- Clear separation of concerns across layers.
+- Centralized security error handling.
+- Refresh token rotation.
 
-## Arquitectura del proyecto
+## Project Architecture
 
-Enfoque híbrido
+### Hybrid approach
 
-- Auth → Clean Architecture.
-- Resto del dominio → Arquitectura feature‑based.
+- **Auth module** → Clean Architecture.
+- **Remaining domain modules** → Feature-based architecture.
 
-Esto permite:
+This approach provides:
 
-- Máxima claridad en un módulo crítico como autenticación
-- Escalabilidad y organización por contexto funcional en el resto del sistema
+- Maximum clarity for a critical module such as authentication.
+- Scalability and functional organization across the rest of the system.
 
-El proyecto utiliza DTOs para:
+The project uses DTOs to:
 
-- Evitar exponer entidades directamente
-- Controlar el contrato de la API
-- Facilitar validaciones y evolución del modelo
+- Prevent direct exposure of entities.
+- Control the API contract.
+- Facilitate validation and model evolution.
 
-Incluye:
+Includes:
 
-- DTOs de request y response
-- Conversión explícita entre entidades y DTOs
+- Request and response DTOs.
+- Explicit mapping between entities and DTOs.
 
-### Manejo de Excepciones
+### Exception Handling
 
-- Excepciones personalizadas por dominio
-- @ControllerAdvice para manejo global
-- Respuestas de error claras y consistentes
+- Domain-specific custom exceptions.
+- Global exception handling using `@ControllerAdvice`.
+- Clear and consistent error responses.
 
+### Pagination
 
-### Paginación
+- The API implements pagination using Spring’s `Pageable`.
+- Support for `page`, `size`, and `sort` parameters.
+- Optimized responses for large datasets.
+- Compatible with modern frontend applications.
 
-- La API implementa paginación usando la clase Pageable de Spring.
-- Soporte para page, size y sort.
-- Respuestas optimizadas para listados grandes.
-- Compatible con frontend moderno.
+## Project Focus
 
-## Enfoque del proyecto
+OsenShop is designed as:
 
-OsenShop está diseñado como:
+- A professional backend showcase project.
+- A solid foundation for a real-world e-commerce system.
+- An example of modern Spring Boot best practices.
 
-- Proyecto demostrativo de backend profesional.
-- Base sólida para un e‑commerce real.
-- Buenas prácticas en Spring Boot moderno.
+Special emphasis on:
 
-Especial énfasis en:
+- Clean architecture
+- Security
+- Scalability
+- Code readability
 
-- Arquitectura limpia
-- Seguridad
-- Escalabilidad
-- Legibilidad del código
+## Upcoming Improvements
 
-## Próximas mejoras
-
-- Tests unitarios y de integración.
-- Documentación con OpenAPI / Swagger.
-- Integración con Stripe.
+- Unit and integration testing.
+- API documentation with OpenAPI / Swagger.
